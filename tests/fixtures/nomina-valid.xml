@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante
+  xmlns:cfdi="http://www.sat.gob.mx/cfd/4"
+  xmlns:nomina12="http://www.sat.gob.mx/nomina12"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd http://www.sat.gob.mx/nomina12 http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina12.xsd"
+  Version="4.0"
+  Fecha="2024-01-15T10:00:00"
+  Sello="MockSello"
+  NoCertificado="00001000000504465028"
+  Certificado="MockCertificado"
+  SubTotal="10000.00"
+  Descuento="0.00"
+  Moneda="MXN"
+  Total="10000.00"
+  TipoDeComprobante="N"
+  Exportacion="01"
+  LugarExpedicion="06600">
+  <cfdi:Emisor Rfc="AAA010101AAA" Nombre="EMPRESA DEMO SA DE CV" RegimenFiscal="601"/>
+  <cfdi:Receptor
+    Rfc="XEXX010101000"
+    Nombre="EMPLEADO DEMO"
+    DomicilioFiscalReceptor="06600"
+    RegimenFiscalReceptor="605"
+    UsoCFDI="CN01"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto
+      ClaveProdServ="84111505"
+      Cantidad="1"
+      ClaveUnidad="ACT"
+      Descripcion="Pago de nomina"
+      ValorUnitario="10000.00"
+      Importe="10000.00"
+      ObjetoImp="01"/>
+  </cfdi:Conceptos>
+  <cfdi:Complemento>
+    <nomina12:Nomina
+      Version="1.2"
+      TipoNomina="O"
+      FechaPago="2024-01-15"
+      FechaInicialPago="2024-01-01"
+      FechaFinalPago="2024-01-15"
+      NumDiasPagados="15"
+      TotalPercepciones="10000.00"
+      TotalDeducciones="0.00"
+      TotalOtrosPagos="0.00">
+      <nomina12:Emisor RegistroPatronal="A1234567890"/>
+      <nomina12:Receptor
+        Curp="XEXX010101HXXXXXX01"
+        NumSeguridadSocial="12345678901"
+        FechaInicioRelLaboral="2020-01-01"
+        Antiguedad="P4Y"
+        TipoContrato="01"
+        Sindicalizado="No"
+        TipoJornada="01"
+        TipoRegimen="02"
+        NumEmpleado="001"
+        Departamento="General"
+        Puesto="Empleado"
+        RiesgoPuesto="1"
+        PeriodicidadPago="04"
+        Banco="002"
+        CuentaBancaria="1234567890123456"
+        SalarioBaseCotApor="333.33"
+        SalarioDiarioIntegrado="333.33"
+        ClaveEntFed="CMX"/>
+      <nomina12:Percepciones
+        TotalSueldos="10000.00"
+        TotalSeparacionIndemnizacion="0.00"
+        TotalJubilacionPensionRetiro="0.00"
+        TotalGravado="10000.00"
+        TotalExento="0.00">
+        <nomina12:Percepcion
+          TipoPercepcion="001"
+          Clave="001"
+          Concepto="Sueldos"
+          ImporteGravado="10000.00"
+          ImporteExento="0.00"/>
+      </nomina12:Percepciones>
+    </nomina12:Nomina>
+    <tfd:TimbreFiscalDigital
+      xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"
+      xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd"
+      Version="1.1"
+      UUID="9D6G8BH3-8E3F-6I8D-E9E0-1G2H3I4D6F7G"
+      FechaTimbrado="2024-01-15T10:05:00"
+      RfcProvCertif="SAT970701NN3"
+      SelloCFD="MockSelloCFDNomina"
+      NoCertificadoSAT="20001000000300022323"
+      SelloSAT="MockSelloSATNomina"/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>

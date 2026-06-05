@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante
+  xmlns:cfdi="http://www.sat.gob.mx/cfd/3"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd"
+  Version="3.3"
+  Serie="A"
+  Folio="1"
+  Fecha="2024-01-15T10:00:00"
+  Sello="MockSello"
+  FormaPago="01"
+  NoCertificado="00001000000504465028"
+  Certificado="MockCertificado"
+  SubTotal="1000.00"
+  Moneda="MXN"
+  Total="1160.00"
+  TipoDeComprobante="I"
+  MetodoPago="PUE"
+  LugarExpedicion="06600">
+  <cfdi:Emisor Rfc="AAA010101AAA" Nombre="EMPRESA DEMO SA DE CV" RegimenFiscal="601"/>
+  <cfdi:Receptor Rfc="XAXX010101000" Nombre="PUBLICO EN GENERAL" UsoCFDI="P01"/>
+  <cfdi:Conceptos>
+    <cfdi:Concepto
+      ClaveProdServ="01010101"
+      Cantidad="1"
+      ClaveUnidad="ACT"
+      Descripcion="Servicio de prueba"
+      ValorUnitario="1000.00"
+      Importe="1000.00">
+      <cfdi:Impuestos>
+        <cfdi:Traslados>
+          <cfdi:Traslado Base="1000.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="160.00"/>
+        </cfdi:Traslados>
+      </cfdi:Impuestos>
+    </cfdi:Concepto>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos TotalImpuestosTrasladados="160.00">
+    <cfdi:Traslados>
+      <cfdi:Traslado Base="1000.00" Impuesto="002" TipoFactor="Tasa" TasaOCuota="0.160000" Importe="160.00"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital
+      xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"
+      xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/TimbreFiscalDigital/TimbreFiscalDigitalv11.xsd"
+      Version="1.1"
+      UUID="7B4E6CF1-6C1D-4G6B-C7C8-9E0F1G2B4D5E"
+      FechaTimbrado="2024-01-15T10:05:00"
+      RfcProvCertif="SAT970701NN3"
+      SelloCFD="MockSelloCFD33"
+      NoCertificadoSAT="20001000000300022323"
+      SelloSAT="MockSelloSAT33"/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>
