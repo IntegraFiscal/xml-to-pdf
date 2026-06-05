@@ -48,7 +48,7 @@ export async function generatePdf(
         new GenericCfdiTranslator(),
         { pageSize: paperSize },
       );
-      return await builder.buildStream(data);
+      return builder.buildStream(data);
     } catch (err) {
       throw new PdfServiceError(
         `PDF generation failed: ${(err as Error).message}`,
@@ -74,7 +74,7 @@ export async function generatePdf(
         new GenericRetencionesTranslator(),
         { pageSize: paperSize },
       );
-      return await builder.buildStream(data);
+      return builder.buildStream(data);
     } catch (err) {
       throw new PdfServiceError(
         `PDF generation failed: ${(err as Error).message}`,
