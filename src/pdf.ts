@@ -48,7 +48,9 @@ export async function generatePdf(
         new GenericCfdiTranslator(),
         { pageSize: paperSize },
       );
-      return builder.buildStream(data);
+      const pdfDoc = builder.buildStream(data);
+      (pdfDoc as unknown as { end(): void }).end();
+      return pdfDoc;
     } catch (err) {
       throw new PdfServiceError(
         `PDF generation failed: ${(err as Error).message}`,
@@ -74,7 +76,9 @@ export async function generatePdf(
         new GenericRetencionesTranslator(),
         { pageSize: paperSize },
       );
-      return builder.buildStream(data);
+      const pdfDoc = builder.buildStream(data);
+      (pdfDoc as unknown as { end(): void }).end();
+      return pdfDoc;
     } catch (err) {
       throw new PdfServiceError(
         `PDF generation failed: ${(err as Error).message}`,

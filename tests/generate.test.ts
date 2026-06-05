@@ -60,3 +60,82 @@ describe('POST /generate — error cases', () => {
     expect(response.json<{ code: string }>().code).toBe('UNSUPPORTED_TYPE');
   });
 });
+
+describe('POST /generate — happy paths', () => {
+  let app: FastifyInstance;
+
+  beforeAll(async () => {
+    app = await buildApp();
+  });
+
+  it('returns 200 PDF for valid CFDI 4.0', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/generate',
+      headers: { 'content-type': 'application/xml' },
+      payload: fixture('cfdi40-valid.xml'),
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['content-type']).toContain('application/pdf');
+    expect(response.rawPayload.length).toBeGreaterThan(100);
+  });
+
+  it('returns 200 PDF for valid CFDI 3.3', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/generate',
+      headers: { 'content-type': 'application/xml' },
+      payload: fixture('cfdi33-valid.xml'),
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['content-type']).toContain('application/pdf');
+    expect(response.rawPayload.length).toBeGreaterThan(100);
+  });
+
+  it('returns 200 PDF for Retenciones', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/generate',
+      headers: { 'content-type': 'application/xml' },
+      payload: fixture('retenciones-valid.xml'),
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['content-type']).toContain('application/pdf');
+    expect(response.rawPayload.length).toBeGreaterThan(100);
+  });
+
+  it('returns 200 PDF for CFDI 4.0 with Nomina 1.2 complement', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/generate',
+      headers: { 'content-type': 'application/xml' },
+      payload: fixture('nomina-valid.xml'),
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['content-type']).toContain('application/pdf');
+    expect(response.rawPayload.length).toBeGreaterThan(100);
+  });
+
+  it('returns 200 PDF with ?paper=a4', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/generate?paper=a4',
+      headers: { 'content-type': 'application/xml' },
+      payload: fixture('cfdi40-valid.xml'),
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['content-type']).toContain('application/pdf');
+    expect(response.rawPayload.length).toBeGreaterThan(100);
+  });
+
+  it('returns 200 PDF when Content-Type is application/octet-stream', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: '/generate',
+      headers: { 'content-type': 'application/octet-stream' },
+      payload: fixture('cfdi40-valid.xml'),
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['content-type']).toContain('application/pdf');
+  });
+});

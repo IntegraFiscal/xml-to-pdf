@@ -14,7 +14,7 @@
   </retenciones:Receptor>
   <retenciones:Periodo MesIni="1" MesFin="1" Ejerc="2024"/>
   <retenciones:Totales
-    MontoTotOperacion="10000.00"
+    montoTotOperacion="10000.00"
     MontoTotGrav="10000.00"
     MontoTotExent="0.00"
     MontoTotRet="1000.00"/>
