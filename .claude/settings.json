@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(node:*)",
+      "Bash(next:*)",
+      "Bash(eslint:*)",
+      "Bash(prettier:*)",
+      "Bash(tsc:*)",
+      "Bash(git:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)"
+    ]
+  },
+  "enabledPlugins": {
+    "typescript-lsp@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true
+  }
+}
