@@ -2,6 +2,7 @@ import { nodeFromXmlString } from '@nodecfdi/cfdi-core';
 import { CfdiData, RetencionesData, GenericCfdiTranslator, GenericRetencionesTranslator } from '@nodecfdi/cfdi-to-pdf';
 import { PdfMakerBuilder } from '@nodecfdi/cfdi-to-pdf/node';
 import { PdfServiceError } from './errors.js';
+import { NominaCfdiTranslator } from './nomina.js';
 
 let _ready = false;
 
@@ -44,8 +45,10 @@ export async function generatePdf(
       );
     }
     try {
+      const isNomina = node.getAttribute('TipoDeComprobante') === 'N';
+      const translator = isNomina ? new NominaCfdiTranslator() : new GenericCfdiTranslator();
       const builder = new PdfMakerBuilder(
-        new GenericCfdiTranslator(),
+        translator as unknown as GenericCfdiTranslator,
         { pageSize: paperSize },
       );
       const pdfDoc = builder.buildStream(data);

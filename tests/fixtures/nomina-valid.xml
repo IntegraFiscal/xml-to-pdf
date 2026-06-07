@@ -9,17 +9,18 @@
   Sello="MockSello"
   NoCertificado="00001000000504465028"
   Certificado="MockCertificado"
-  SubTotal="10000.00"
-  Descuento="0.00"
+  SubTotal="10700.00"
   Moneda="MXN"
-  Total="10000.00"
+  Total="10700.00"
   TipoDeComprobante="N"
+  MetodoPago="PUE"
+  FormaPago="03"
   Exportacion="01"
   LugarExpedicion="06600">
   <cfdi:Emisor Rfc="AAA010101AAA" Nombre="EMPRESA DEMO SA DE CV" RegimenFiscal="601"/>
   <cfdi:Receptor
-    Rfc="XEXX010101000"
-    Nombre="EMPLEADO DEMO"
+    Rfc="CAVE830515H10"
+    Nombre="CARLOS PÉREZ VEGA"
     DomicilioFiscalReceptor="06600"
     RegimenFiscalReceptor="605"
     UsoCFDI="CN01"/>
@@ -29,8 +30,8 @@
       Cantidad="1"
       ClaveUnidad="ACT"
       Descripcion="Pago de nomina"
-      ValorUnitario="10000.00"
-      Importe="10000.00"
+      ValorUnitario="10700.00"
+      Importe="10700.00"
       ObjetoImp="01"/>
   </cfdi:Conceptos>
   <cfdi:Complemento>
@@ -41,42 +42,81 @@
       FechaInicialPago="2024-01-01"
       FechaFinalPago="2024-01-15"
       NumDiasPagados="15"
-      TotalPercepciones="10000.00"
-      TotalDeducciones="0.00"
+      TotalPercepciones="12500.00"
+      TotalDeducciones="1800.00"
       TotalOtrosPagos="0.00">
-      <nomina12:Emisor RegistroPatronal="A1234567890"/>
+      <nomina12:Emisor
+        RegistroPatronal="A1234567890"
+        RfcPatronOrigen="AAA010101AAA"/>
       <nomina12:Receptor
-        Curp="XEXX010101HXXXXXX01"
+        Curp="CAVE830515HDFRGR02"
         NumSeguridadSocial="12345678901"
-        FechaInicioRelLaboral="2020-01-01"
-        Antiguedad="P4Y"
+        FechaInicioRelLaboral="2020-03-15"
+        Antiguedad="P4Y2M"
         TipoContrato="01"
         Sindicalizado="No"
         TipoJornada="01"
         TipoRegimen="02"
-        NumEmpleado="001"
-        Departamento="General"
-        Puesto="Empleado"
+        NumEmpleado="EMP-042"
+        Departamento="Tecnologia de la Informacion"
+        Puesto="Desarrollador Senior"
         RiesgoPuesto="1"
         PeriodicidadPago="04"
         Banco="002"
         CuentaBancaria="1234567890123456"
-        SalarioBaseCotApor="333.33"
-        SalarioDiarioIntegrado="333.33"
+        SalarioBaseCotApor="416.67"
+        SalarioDiarioIntegrado="541.67"
         ClaveEntFed="CMX"/>
       <nomina12:Percepciones
-        TotalSueldos="10000.00"
+        TotalSueldos="12500.00"
         TotalSeparacionIndemnizacion="0.00"
         TotalJubilacionPensionRetiro="0.00"
-        TotalGravado="10000.00"
-        TotalExento="0.00">
+        TotalGravado="10750.00"
+        TotalExento="1750.00">
         <nomina12:Percepcion
           TipoPercepcion="001"
           Clave="001"
           Concepto="Sueldos"
           ImporteGravado="10000.00"
           ImporteExento="0.00"/>
+        <nomina12:Percepcion
+          TipoPercepcion="002"
+          Clave="002"
+          Concepto="Aguinaldo"
+          ImporteGravado="0.00"
+          ImporteExento="1500.00"/>
+        <nomina12:Percepcion
+          TipoPercepcion="011"
+          Clave="011"
+          Concepto="Prima Vacacional"
+          ImporteGravado="500.00"
+          ImporteExento="250.00"/>
+        <nomina12:Percepcion
+          TipoPercepcion="023"
+          Clave="023"
+          Concepto="Premio Asistencia"
+          ImporteGravado="250.00"
+          ImporteExento="0.00"/>
       </nomina12:Percepciones>
+      <nomina12:Deducciones
+        TotalOtrasDeduciones="800.00"
+        TotalImpuestosRetenidos="1000.00">
+        <nomina12:Deduccion
+          TipoDeduccion="001"
+          Clave="001"
+          Concepto="Seguridad Social (IMSS)"
+          Importe="500.00"/>
+        <nomina12:Deduccion
+          TipoDeduccion="002"
+          Clave="002"
+          Concepto="ISR"
+          Importe="1000.00"/>
+        <nomina12:Deduccion
+          TipoDeduccion="005"
+          Clave="005"
+          Concepto="Aportaciones INFONAVIT"
+          Importe="300.00"/>
+      </nomina12:Deducciones>
     </nomina12:Nomina>
     <tfd:TimbreFiscalDigital
       xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital"
