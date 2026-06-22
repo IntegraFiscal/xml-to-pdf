@@ -36,6 +36,7 @@ src/
 ```
 
 **Request flow:** `generate.ts` calls `generatePdf(buffer, paperSize)` in `pdf.ts`, which:
+0. Decodes the raw bytes via `decodeXmlBuffer` BEFORE parsing — strict UTF-8 with a Windows-1252 fallback (PACs sometimes emit Latin-1, so the accented nómina attribute name `Antigüedad` arrives as a lone 0xFC byte that corrupts as UTF-8), then strips a leading BOM / whitespace before `<?xml`. xmldom runs with `onErrorStopParsing`, so any of these byte quirks otherwise throws `INVALID_XML`.
 1. Parses XML with `nodeFromXmlString` (returns `XmlNode`, not a DOM node — use `.name()` not `.nodeName`)
 2. Detects root element local name (`Comprobante` → CFDI, `Retenciones` → Retenciones)
 3. Constructs `CfdiData` or `RetencionesData` (throws if `tfd:TimbreFiscalDigital` is absent)

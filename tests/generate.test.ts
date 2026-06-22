@@ -139,3 +139,61 @@ describe('POST /generate — happy paths', () => {
     expect(response.headers['content-type']).toContain('application/pdf');
   });
 });
+
+describe('POST /generate — byte-level input quirks', () => {
+  let app: FastifyInstance;
+
+  beforeAll(async () => {
+    app = await buildApp();
+  });
+
+  // Real SAT nómina XMLs use the accented attribute name "Antigüedad" on
+  // nomina12:Receptor. When a PAC emits the file as Windows-1252 / Latin-1, the
+  // "ü" arrives as a single 0xFC byte; decoding it as UTF-8 corrupts the
+  // attribute NAME and the strict xmldom parser rejects the whole document.
+  it('returns 200 PDF for a nómina encoded as Windows-1252 (accented attr name)', async () => {
+    const utf8 = fixture('nomina-valid.xml')
+      .toString('utf8')
+      .replace(/Antiguedad=/g, 'Antigüedad=');
+    // Re-encode as latin1 so "ü" becomes the single byte 0xFC, as a PAC would.
+    const payload = Buffer.from(utf8, 'latin1');
+    const response = await app.inject({
+      method: 'POST',
+      url: '/generate',
+      headers: { 'content-type': 'application/xml' },
+      payload,
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['content-type']).toContain('application/pdf');
+  });
+
+  it('returns 200 PDF for valid CFDI prefixed with a UTF-8 BOM', async () => {
+    const payload = Buffer.concat([
+      Buffer.from([0xef, 0xbb, 0xbf]),
+      fixture('cfdi40-valid.xml'),
+    ]);
+    const response = await app.inject({
+      method: 'POST',
+      url: '/generate',
+      headers: { 'content-type': 'application/xml' },
+      payload,
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['content-type']).toContain('application/pdf');
+  });
+
+  it('returns 200 PDF for valid CFDI with leading whitespace before <?xml', async () => {
+    const payload = Buffer.concat([
+      Buffer.from('\n  ', 'utf8'),
+      fixture('cfdi40-valid.xml'),
+    ]);
+    const response = await app.inject({
+      method: 'POST',
+      url: '/generate',
+      headers: { 'content-type': 'application/xml' },
+      payload,
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.headers['content-type']).toContain('application/pdf');
+  });
+});

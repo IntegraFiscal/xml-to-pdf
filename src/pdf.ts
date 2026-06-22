@@ -11,6 +11,30 @@ import { NominaCfdiTranslator } from "./nomina.js";
 
 let _ready = false;
 
+/**
+ * Decode raw request bytes into a clean XML string before parsing.
+ *
+ * SAT/PAC-emitted CFDIs are not always pristine UTF-8:
+ *  - Some are encoded as Windows-1252 / Latin-1. The accented nomina12 attribute
+ *    name "Antigüedad" then arrives as a single 0xFC byte; decoding as UTF-8
+ *    corrupts the attribute NAME and the strict xmldom parser rejects the doc.
+ *  - Some carry a leading UTF-8 BOM or whitespace before the "<?xml" declaration,
+ *    which xmldom (onErrorStopParsing) treats as content outside the root.
+ *
+ * Decode strictly as UTF-8 first; fall back to Windows-1252 (a Latin-1 superset
+ * that maps 0xFC → ü) only when the bytes are not valid UTF-8. Then strip any
+ * BOM and leading whitespace so the document begins at "<".
+ */
+function decodeXmlBuffer(buf: Buffer): string {
+	let text: string;
+	try {
+		text = new TextDecoder("utf-8", { fatal: true }).decode(buf);
+	} catch {
+		text = new TextDecoder("windows-1252").decode(buf);
+	}
+	return text.replace(/^﻿/, "").replace(/^\s+(?=<)/, "");
+}
+
 export async function initPdf(): Promise<void> {
 	new PdfMakerBuilder(new GenericCfdiTranslator());
 	new PdfMakerBuilder(new GenericRetencionesTranslator());
@@ -28,7 +52,7 @@ export async function generatePdf(
 	// 1. Parse XML — throws on malformed input
 	let node: ReturnType<typeof nodeFromXmlString>;
 	try {
-		node = nodeFromXmlString(xmlBuffer.toString("utf8"));
+		node = nodeFromXmlString(decodeXmlBuffer(xmlBuffer));
 	} catch {
 		throw new PdfServiceError("XML is not parseable", "INVALID_XML", 400);
 	}
