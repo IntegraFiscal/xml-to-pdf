@@ -66,3 +66,46 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      # ── Aviso al tren de release ─────────────────────────────────────────
+      # Tras publicar, avisamos a NeuralTax-deployment, que escribe el bump del
+      # tag y el PR de promoción (IntegraFiscal/NeuralTax-deployment#8). Estos
+      # pasos van DESPUÉS del push: si el push falla, el job aborta y no se
+      # emite ningún aviso — un aviso sin imagen detrás produciría un PR
+      # apuntando a un tag inexistente.
+      # No llevan `if:` propio: el del job ya restringe a push sobre main.
+      - name: Resolver el tag publicado
+        id: published
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          set -euo pipefail
+          tag="$(printf '%s\n' "$TAGS" | sed -n 's#.*:\(sha-[0-9a-f]\{7,40\}\)$#\1#p' | head -n1)"
+          if [ -z "$tag" ]; then
+            printf 'ningún tag sha- entre los publicados:\n%s\n' "$TAGS" >&2
+            exit 1
+          fi
+          printf 'tag=%s\n' "$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Token efímero de la App
+        id: token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.RELEASE_TRAIN_APP_ID }}
+          private-key: ${{ secrets.RELEASE_TRAIN_PRIVATE_KEY }}
+          owner: IntegraFiscal
+          # Solo el repo receptor. Este repo únicamente dispara; no necesita
+          # leer los otros repos de app.
+          repositories: NeuralTax-deployment
+
+      - name: Avisar al tren de release
+        env:
+          GH_TOKEN: ${{ steps.token.outputs.token }}
+          TAG: ${{ steps.published.outputs.tag }}
+          COMMIT: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          jq -n --arg tag "$TAG" --arg commit "$COMMIT" \
+            '{event_type:"app-published",
+              client_payload:{app:"xml-to-pdf", tag:$tag, commit:$commit}}' \
+          | gh api repos/IntegraFiscal/NeuralTax-deployment/dispatches --input -
