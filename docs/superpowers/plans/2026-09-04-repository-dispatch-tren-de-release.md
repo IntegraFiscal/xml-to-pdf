@@ -66,7 +66,7 @@ es un espejo de la que ya corre en `IntegraFiscal/NeuralTax`.
   `{event_type: "app-published", client_payload: {app, tag, commit}}` que consume
   `IntegraFiscal/NeuralTax-deployment/.github/workflows/promote.yml`.
 
-- [ ] **Step 1: Escribir la comprobación que falla — el extractor de tag**
+- [x] **Step 1: Escribir la comprobación que falla — el extractor de tag**
 
 El único trozo con lógica es el `sed` que saca el tag `sha-` de la salida de
 `metadata-action`. Se comprueba contra una muestra real antes de meterlo en el
@@ -104,7 +104,7 @@ echo "OK: 4/4"
 SCRIPT
 ```
 
-- [ ] **Step 2: Ejecutar la comprobación**
+- [x] **Step 2: Ejecutar la comprobación**
 
 Run: `bash /tmp/check-tag-extract.sh`
 Expected: `OK: 4/4`
@@ -113,7 +113,7 @@ Si algún caso falla, el `sed` está mal y hay que arreglarlo **aquí**, antes d
 tocar el workflow — depurar esto dentro de un run de Actions cuesta minutos por
 iteración.
 
-- [ ] **Step 3: Añadir los tres pasos al workflow**
+- [x] **Step 3: Añadir los tres pasos al workflow**
 
 Añadir al final de `.github/workflows/ci.yml`, después de la línea
 `          cache-to: type=gha,mode=max`, con la misma indentación que los pasos
@@ -165,7 +165,7 @@ existentes del job `publish` (6 espacios para el `- name:`):
           | gh api repos/IntegraFiscal/NeuralTax-deployment/dispatches --input -
 ```
 
-- [ ] **Step 4: Verificar que el YAML sigue siendo válido**
+- [x] **Step 4: Verificar que el YAML sigue siendo válido**
 
 `actionlint` no está instalado en esta máquina. Con Docker disponible:
 
@@ -189,7 +189,7 @@ print('OK')
 ```
 Expected: la lista de pasos y luego `OK`.
 
-- [ ] **Step 5: Revisar el diff a ojo**
+- [x] **Step 5: Revisar el diff a ojo**
 
 Run: `git diff .github/workflows/ci.yml`
 
@@ -200,7 +200,7 @@ Confirmar, contra Global Constraints:
 - Ningún `${{ secrets.* }}` ni `${{ github.* }}` aparece dentro de un bloque
   `run:`; todos llegan por `env:`.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add .github/workflows/ci.yml
@@ -235,13 +235,13 @@ avisa" solo se pueden observar en GitHub. Esta tarea es la verificación.
 - Consumes: la rama `ci/dispatch-release-train` con el commit de la Task 1.
 - Produces: un PR contra `main` listo para revisión humana.
 
-- [ ] **Step 1: Push de la rama**
+- [x] **Step 1: Push de la rama**
 
 ```bash
 git push -u origin ci/dispatch-release-train
 ```
 
-- [ ] **Step 2: Abrir el PR**
+- [x] **Step 2: Abrir el PR**
 
 ```bash
 gh pr create --base main --title "ci: avisar al tren de release tras publicar la imagen" --body "$(cat <<'EOF'
@@ -267,7 +267,7 @@ EOF
 )"
 ```
 
-- [ ] **Step 3: Verificar que el PR NO dispara el job `publish`**
+- [x] **Step 3: Verificar que el PR NO dispara el job `publish`**
 
 Esperar a que terminen los checks del PR y listar los jobs:
 
